@@ -420,9 +420,14 @@ impl Build {
             // CypherAir OpenSSL fork carrying matching arm64e config targets.
             // Do not upstream this branch independently of the OpenSSL changes.
             "arm64e-apple-ios" => "ios64e-cross",
+            "aarch64-apple-tvos" => "ios64-cross",
+            "arm64e-apple-tvos" => "ios64e-cross",
             "aarch64-apple-visionos" => "ios64-cross",
+            "arm64e-apple-visionos" => "ios64e-cross",
             "x86_64-apple-ios" => "iossimulator-x86_64-xcrun",
             "aarch64-apple-ios-sim" => "iossimulator-arm64-xcrun",
+            "x86_64-apple-tvos" => "iossimulator-x86_64-xcrun",
+            "aarch64-apple-tvos-sim" => "iossimulator-arm64-xcrun",
             "aarch64-apple-visionos-sim" => "iossimulator-arm64-xcrun",
             "aarch64-apple-ios-macabi" => "darwin64-arm64-cc",
             "x86_64-apple-ios-macabi" => "darwin64-x86_64-cc",
@@ -499,7 +504,10 @@ impl Build {
                 }
 
                 // cargo-lipo specifies this but OpenSSL complains
-                if target.contains("apple-ios") || target.contains("apple-visionos") {
+                if target.contains("apple-ios")
+                    || target.contains("apple-tvos")
+                    || target.contains("apple-visionos")
+                {
                     if arg == "-isysroot" {
                         is_isysroot = true;
                         continue;
@@ -520,7 +528,7 @@ impl Build {
                 configure.arg(arg);
             }
 
-            if target == "aarch64-apple-visionos" {
+            if target == "aarch64-apple-visionos" || target == "arm64e-apple-visionos" {
                 if let Some(ref isysr) = ios_isysroot {
                     configure.env(
                         "CC",
@@ -536,6 +544,26 @@ impl Build {
                         "CC",
                         &format!(
                             "xcrun -sdk xrsimulator cc -isysroot {}",
+                            sanitize_sh(&Path::new(isysr))
+                        ),
+                    );
+                }
+            } else if target == "aarch64-apple-tvos" || target == "arm64e-apple-tvos" {
+                if let Some(ref isysr) = ios_isysroot {
+                    configure.env(
+                        "CC",
+                        &format!(
+                            "xcrun -sdk appletvos cc -isysroot {}",
+                            sanitize_sh(&Path::new(isysr))
+                        ),
+                    );
+                }
+            } else if target == "aarch64-apple-tvos-sim" || target == "x86_64-apple-tvos" {
+                if let Some(ref isysr) = ios_isysroot {
+                    configure.env(
+                        "CC",
+                        &format!(
+                            "xcrun -sdk appletvsimulator cc -isysroot {}",
                             sanitize_sh(&Path::new(isysr))
                         ),
                     );
