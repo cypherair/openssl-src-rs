@@ -30,47 +30,6 @@ pub struct Artifacts {
     target: String,
 }
 
-fn patch_arm64e_config_file(path: &Path, needle: &str, replacement: &str) -> Result<(), String> {
-    let contents = fs::read_to_string(path).map_err(|e| format!("{}: {e}", path.display()))?;
-
-    if contents.contains(replacement) {
-        return Ok(());
-    }
-
-    let updated = contents.replacen(needle, replacement, 1);
-    if updated == contents {
-        return Err(format!(
-            "failed to patch arm64e OpenSSL config in {}: anchor not found",
-            path.display()
-        ));
-    }
-
-    fs::write(path, updated).map_err(|e| format!("{}: {e}", path.display()))
-}
-
-fn patch_arm64e_apple_targets(inner_dir: &Path) -> Result<(), String> {
-    let ios_conf = inner_dir.join("Configurations/15-ios.conf");
-    patch_arm64e_config_file(
-        &ios_conf,
-        "    \"ios64-cross\" => {\n        inherit_from     => [ \"ios64-xcrun\" ],\n        CC               => \"cc\",\n        cflags           => add(\"-isysroot \\\"\\$(CROSS_TOP)/SDKs/\\$(CROSS_SDK)\\\"\"),\n    },\n);\n",
-        "    \"ios64-cross\" => {\n        inherit_from     => [ \"ios64-xcrun\" ],\n        CC               => \"cc\",\n        cflags           => add(\"-isysroot \\\"\\$(CROSS_TOP)/SDKs/\\$(CROSS_SDK)\\\"\"),\n    },\n    \"ios64e-cross\" => {\n        inherit_from     => [ \"ios-common\" ],\n        CC               => \"cc\",\n        cflags           => add(\"-arch arm64e -fno-common -isysroot \\\"\\$(CROSS_TOP)/SDKs/\\$(CROSS_SDK)\\\"\"),\n        bn_ops           => \"SIXTY_FOUR_BIT_LONG RC4_CHAR\",\n        asm_arch         => 'aarch64',\n        perlasm_scheme   => \"ios64\",\n    },\n);\n",
-    )?;
-
-    let darwin_conf = inner_dir.join("Configurations/10-main.conf");
-    patch_arm64e_config_file(
-        &darwin_conf,
-        "    \"darwin64-arm64-cc\" => { inherit_from => [ \"darwin64-arm64\" ] }, # \"Historic\" alias\n    \"darwin64-arm64\" => {\n",
-        "    \"darwin64-arm64-cc\" => { inherit_from => [ \"darwin64-arm64\" ] }, # \"Historic\" alias\n    \"darwin64-arm64e-cc\" => { inherit_from => [ \"darwin64-arm64e\" ] }, # arm64e experiment alias\n    \"darwin64-arm64\" => {\n",
-    )?;
-    patch_arm64e_config_file(
-        &darwin_conf,
-        "    \"darwin64-arm64\" => {\n        inherit_from     => [ \"darwin-common\" ],\n        CFLAGS           => add(\"-Wall\"),\n        cflags           => add(\"-arch arm64\"),\n        lib_cppflags     => add(\"-DL_ENDIAN\"),\n        bn_ops           => \"SIXTY_FOUR_BIT_LONG\",\n        asm_arch         => 'aarch64',\n        perlasm_scheme   => \"ios64\",\n    },\n\n##### GNU Hurd\n",
-        "    \"darwin64-arm64\" => {\n        inherit_from     => [ \"darwin-common\" ],\n        CFLAGS           => add(\"-Wall\"),\n        cflags           => add(\"-arch arm64\"),\n        lib_cppflags     => add(\"-DL_ENDIAN\"),\n        bn_ops           => \"SIXTY_FOUR_BIT_LONG\",\n        asm_arch         => 'aarch64',\n        perlasm_scheme   => \"ios64\",\n    },\n    \"darwin64-arm64e\" => {\n        inherit_from     => [ \"darwin-common\" ],\n        CFLAGS           => add(\"-Wall\"),\n        cflags           => add(\"-arch arm64e\"),\n        lib_cppflags     => add(\"-DL_ENDIAN\"),\n        bn_ops           => \"SIXTY_FOUR_BIT_LONG\",\n        asm_arch         => 'aarch64',\n        perlasm_scheme   => \"ios64\",\n    },\n\n##### GNU Hurd\n",
-    )?;
-
-    Ok(())
-}
-
 impl Build {
     pub fn new() -> Build {
         Build {
@@ -194,9 +153,6 @@ impl Build {
         let inner_dir = build_dir.join("src");
         fs::create_dir_all(&inner_dir).map_err(|e| format!("{}: {e}", inner_dir.display()))?;
         cp_r(&source_dir(), &inner_dir)?;
-        if target == "arm64e-apple-ios" || target == "arm64e-apple-darwin" {
-            patch_arm64e_apple_targets(&inner_dir)?;
-        }
 
         let perl_program =
             env::var("OPENSSL_SRC_PERL").unwrap_or(env::var("PERL").unwrap_or("perl".to_string()));
