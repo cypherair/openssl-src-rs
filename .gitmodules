@@ -4,3 +4,4 @@
 [submodule "openssl"]
 	path = openssl
 	url = https://github.com/cypherair/openssl.git
+	branch = carry/apple-arm64e-targets

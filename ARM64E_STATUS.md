@@ -1,6 +1,6 @@
 # openssl-src-rs arm64e Status
 
-Snapshot date: 2026-04-23
+Snapshot date: 2026-04-24
 
 ## Repo Identity
 
@@ -25,17 +25,21 @@ app build flow" and "forked OpenSSL target definitions".
 
 - The active carry branch exists and is in use by the CypherAir experiment
   worktree.
-- The app experiment currently patches `openssl-src` to this fork at a checked
-  in revision, so this repo is part of the active chain rather than a dormant
-  fork.
+- The app experiment currently patches `openssl-src` to this fork's
+  `carry/apple-arm64e-openssl-fork` branch, with the app-side `Cargo.lock`
+  recording the resolved commit. This repo is part of the active chain rather
+  than a dormant fork.
 - The remaining work is upstreaming and chain cleanup, not basic enablement.
 
 ## Current Chain Relationship
 
 - App experiment worktree `pgp-mobile/Cargo.toml` patches `openssl-src` to this
-  fork.
+  fork's `carry/apple-arm64e-openssl-fork` branch.
 - This carry branch is expected to point at the CypherAir OpenSSL fork rather
   than upstream OpenSSL.
+- `.gitmodules` records `carry/apple-arm64e-targets` as the OpenSSL submodule
+  branch, and the committed submodule pointer should be kept at that carry
+  branch's current validated head.
 - Until the OpenSSL-side target-definition work lands upstream, this branch
   should be treated as downstream carry glue, not as a standalone upstream PR
   candidate.
@@ -62,7 +66,8 @@ app build flow" and "forked OpenSSL target definitions".
 
 Update this file whenever any of the following changes:
 
-- the `openssl-src` patch target or pinned revision used by the app experiment
+- the `openssl-src` patch target, branch, or lockfile policy used by the app
+  experiment
 - the OpenSSL submodule pointer or branch policy
 - the local/remote carry branch names
 - the relationship between this repo and the OpenSSL fork

@@ -17,7 +17,7 @@ carry layer for Apple `arm64e`.
   - `/Users/tianren/coding/cypherair-apple-arm64e-unified-experiment`
 - Rust fork:
   - `/Users/tianren/coding/rust`
-  - branch `codex/arm64e-darwin-ptrauth-spike`
+  - branch `codex/arm64e-upstream-ready-integration-2026-04-24-u9836b06`
 - OpenSSL target-definition fork:
   - `/Users/tianren/coding/openssl`
   - branches `carry/apple-arm64e-targets`, `prep/apple-arm64e-targets`
