@@ -36,6 +36,8 @@ Current downstream responsibilities include:
 - Apple `arm64e` target-to-Configure mappings
 - Apple SDK-specific `xcrun` / `CC` overrides
 - the OpenSSL submodule pointer used by the current carry chain
+- the `arm64e-carry-chain` workflow that checks the OpenSSL submodule URL,
+  branch, and pointer before packaging and testcrate validation
 
 Detailed arm64e progress belongs in [ARM64E_STATUS.md](ARM64E_STATUS.md). Keep
 that file synchronized when branch topology, the OpenSSL fork pointer, or the
@@ -45,6 +47,8 @@ app-side dependency chain changes.
 
 - Keep the OpenSSL submodule pointing at the CypherAir OpenSSL fork, not
   upstream OpenSSL, unless the chain has intentionally changed.
+- Keep `ci/check-arm64e-carry-chain.sh` and `.github/workflows/arm64e-carry-chain.yml`
+  synchronized with the intended OpenSSL carry branch.
 - If a change is only meaningful because the forked OpenSSL repo carries
   downstream config targets, document that clearly in code comments.
 - Prefer the smallest mapping / SDK override change that preserves existing

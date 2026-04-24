@@ -1,0 +1,63 @@
+name: arm64e Carry Chain
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - carry/apple-arm64e-openssl-fork
+  pull_request:
+    branches:
+      - main
+      - carry/apple-arm64e-openssl-fork
+
+permissions:
+  contents: read
+
+jobs:
+  carry-chain:
+    if: github.repository == 'cypherair/openssl-src-rs'
+    runs-on: macos-26
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
+
+      - name: Show runner environment
+        run: |
+          sw_vers
+          uname -a
+          df -h
+          git show -s --format='HEAD: %H %P %ae %s' HEAD
+          git submodule status --recursive
+
+      - name: Install Rust stable
+        run: |
+          rustup set profile minimal
+          rustup toolchain install stable
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - name: Check OpenSSL carry submodule freshness
+        run: ci/check-arm64e-carry-chain.sh
+
+      - name: Package openssl-src crate
+        run: cargo package --no-verify
+
+      - name: Patch packaged testcrate
+        run: |
+          set -euo pipefail
+          (cd target/package && tar -xf openssl-src-*.crate && rm openssl-src-*.crate && mv openssl-src-* openssl-src)
+          sed -i '' -e 's|\.\.|../target/package/openssl-src|g' testcrate/Cargo.toml
+          echo "[workspace]" >> testcrate/Cargo.toml
+          cat testcrate/Cargo.toml
+
+      - name: Run macOS testcrate against packaged source
+        run: |
+          set -euo pipefail
+          cargo +stable generate-lockfile --manifest-path testcrate/Cargo.toml
+          cargo +stable test --manifest-path testcrate/Cargo.toml --target aarch64-apple-darwin -vv
+          cargo +stable run --release --target aarch64-apple-darwin --manifest-path testcrate/Cargo.toml --features package -vv

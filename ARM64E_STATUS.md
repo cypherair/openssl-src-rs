@@ -30,6 +30,10 @@ app build flow" and "forked OpenSSL target definitions".
   recording the resolved commit. This repo is part of the active chain rather
   than a dormant fork.
 - The remaining work is upstreaming and chain cleanup, not basic enablement.
+- The carry branch now has a focused GitHub Actions workflow,
+  `.github/workflows/arm64e-carry-chain.yml`, that validates the OpenSSL
+  submodule URL, expected branch, committed pointer freshness, Cargo package
+  shape, and packaged testcrate path on macOS.
 
 ## Current Chain Relationship
 
@@ -69,6 +73,7 @@ Update this file whenever any of the following changes:
 - the `openssl-src` patch target, branch, or lockfile policy used by the app
   experiment
 - the OpenSSL submodule pointer or branch policy
+- the carry-chain CI workflow or pointer-freshness rules
 - the local/remote carry branch names
 - the relationship between this repo and the OpenSSL fork
 - the upstreaming posture of the carry branch
