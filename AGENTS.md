@@ -13,21 +13,20 @@ carry layer for Apple `arm64e`.
 
 ## Related Forks
 
-- App experiment worktree:
-  - `/Users/tianren/coding/cypherair-apple-arm64e-unified-experiment`
+- App repository:
+  - `/Users/tianren/coding/cypherair-main`
+  - canonical branch: `main`
 - Rust fork:
   - `/Users/tianren/coding/rust`
-  - branch `codex/arm64e-upstream-ready-integration-2026-04-24-u9836b06`
+  - branch `carry/cypherair-arm64e-toolchain`
 - OpenSSL target-definition fork:
   - `/Users/tianren/coding/openssl`
   - branches `carry/apple-arm64e-targets`, `prep/apple-arm64e-targets`
-- Related but currently unconfirmed in the active chain:
-  - `/Users/tianren/coding/rust-openssl`
 
 ## Current Role
 
 This repo is the glue layer between the Rust-side fork and the OpenSSL-side
-fork. It exists so the CypherAir experiment can keep a reproducible OpenSSL
+fork. It exists so the CypherAir app build chain can keep a reproducible OpenSSL
 source build while still using Apple `arm64e` target mappings that do not yet
 exist upstream.
 
