@@ -1,6 +1,6 @@
 # openssl-src-rs arm64e Status
 
-Snapshot date: 2026-04-24
+Snapshot date: 2026-05-27
 
 ## Repo Identity
 
@@ -17,15 +17,14 @@ Snapshot date: 2026-04-24
 
 ## Role In The arm64e Chain
 
-This repo is the glue layer that lets the CypherAir Rust and app experiments
-consume the CypherAir OpenSSL fork. It is the bridge between "patched Rust and
-app build flow" and "forked OpenSSL target definitions".
+This repo is the glue layer that lets the CypherAir Rust fork and app build
+chain consume the CypherAir OpenSSL fork. It is the bridge between "patched
+Rust toolchain" and "forked OpenSSL target definitions".
 
 ## Current Progress
 
-- The active carry branch exists and is in use by the CypherAir experiment
-  worktree.
-- The app experiment currently patches `openssl-src` to this fork's
+- The active carry branch exists and is in use by the CypherAir app repository.
+- The app currently patches `openssl-src` to this fork's
   `carry/apple-arm64e-openssl-fork` branch, with the app-side `Cargo.lock`
   recording the resolved commit. This repo is part of the active chain rather
   than a dormant fork.
@@ -37,7 +36,7 @@ app build flow" and "forked OpenSSL target definitions".
 
 ## Current Chain Relationship
 
-- App experiment worktree `pgp-mobile/Cargo.toml` patches `openssl-src` to this
+- The app repository `pgp-mobile/Cargo.toml` patches `openssl-src` to this
   fork's `carry/apple-arm64e-openssl-fork` branch.
 - This carry branch is expected to point at the CypherAir OpenSSL fork rather
   than upstream OpenSSL.
@@ -50,14 +49,14 @@ app build flow" and "forked OpenSSL target definitions".
 
 ## Related Forks And Paths
 
-- App experiment worktree:
-  - `/Users/tianren/coding/cypherair-apple-arm64e-unified-experiment`
+- App repository:
+  - `/Users/tianren/coding/cypherair-main`
+  - canonical branch: `main`
 - Rust fork:
   - `/Users/tianren/coding/rust`
+  - branch `carry/cypherair-arm64e-toolchain`
 - OpenSSL target-definition fork:
   - `/Users/tianren/coding/openssl`
-- Related but currently unconfirmed in the active chain:
-  - `/Users/tianren/coding/rust-openssl`
 
 ## Upstreaming Posture
 
@@ -71,7 +70,7 @@ app build flow" and "forked OpenSSL target definitions".
 Update this file whenever any of the following changes:
 
 - the `openssl-src` patch target, branch, or lockfile policy used by the app
-  experiment
+  repository
 - the OpenSSL submodule pointer or branch policy
 - the carry-chain CI workflow or pointer-freshness rules
 - the local/remote carry branch names
