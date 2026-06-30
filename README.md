@@ -13,6 +13,7 @@ It has no specific support for LTS versions.
 The crate versions follow the `X.Y.Z+B` pattern:
 * The major version `X` is the upstream OpenSSL API/ABI compatibility version:
   * `300` for 3.Y.Z
+  * `400` for 4.Y.Z
 * The minor `Y` and patch `Z` versions are incremented when making changes
   to the crate, either OpenSSL update or internal changes.
 * `B` contains the full upstream OpenSSL version, like `1.1.1k` or `3.0.7`.
