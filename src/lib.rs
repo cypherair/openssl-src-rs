@@ -528,6 +528,12 @@ impl Build {
                 configure.arg(arg);
             }
 
+            // OpenSSL's libapps uses fork(), which is unavailable on tvOS.
+            // This wrapper only packages libssl and libcrypto, so omit apps.
+            if target.contains("apple-tvos") {
+                configure.arg("no-apps");
+            }
+
             if target == "aarch64-apple-visionos" || target == "arm64e-apple-visionos" {
                 if let Some(ref isysr) = ios_isysroot {
                     configure.env(

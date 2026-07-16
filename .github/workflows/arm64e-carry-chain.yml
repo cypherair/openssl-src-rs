@@ -38,6 +38,7 @@ jobs:
           rustup set profile minimal
           rustup toolchain install stable
           rustup default stable
+          rustup target add aarch64-apple-tvos
           rustc --version
           cargo --version
 
@@ -61,3 +62,9 @@ jobs:
           cargo +stable generate-lockfile --manifest-path testcrate/Cargo.toml
           cargo +stable test --manifest-path testcrate/Cargo.toml --target aarch64-apple-darwin -vv
           cargo +stable run --release --target aarch64-apple-darwin --manifest-path testcrate/Cargo.toml --features package -vv
+
+      - name: Build tvOS testcrate against packaged source
+        run: |
+          set -euo pipefail
+          cargo +stable build --manifest-path testcrate/Cargo.toml \
+            --target aarch64-apple-tvos --features package --bin package -vv

@@ -31,6 +31,9 @@ Rust toolchain" and "forked OpenSSL target definitions".
   arm64e Configure targets, imports the official OpenSSL 3.6.3 release, and
   signs the assembly-selected Poly1305 callbacks for the arm64e C function
   pointer ABI.
+- tvOS wrapper builds disable the unused OpenSSL applications because libapps
+  calls `fork()`, which the tvOS SDK prohibits. The carry workflow compiles a
+  packaged aarch64 tvOS testcrate so this library-only policy cannot regress.
 - The app currently patches `openssl-src` to this fork's
   `carry/apple-arm64e-openssl-fork` branch, with the app-side `Cargo.lock`
   recording the resolved commit. This repo is part of the active chain rather
