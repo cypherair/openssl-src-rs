@@ -1,6 +1,6 @@
 # openssl-src-rs arm64e Status
 
-Snapshot date: 2026-05-27
+Snapshot date: 2026-07-16
 
 ## Repo Identity
 
@@ -24,10 +24,18 @@ Rust toolchain" and "forked OpenSSL target definitions".
 ## Current Progress
 
 - The active carry branch exists and is in use by the CypherAir app repository.
+- The carry package version is `openssl-src` `300.6.1+3.6.3`, matching
+  OpenSSL 3.6.3.
+- The OpenSSL submodule is pinned to CypherAir carry merge
+  `e9038561371fe42b0cba8002d46be05f4f87906f`. That merge retains the Apple
+  arm64e Configure targets, imports the official OpenSSL 3.6.3 release, and
+  signs the assembly-selected Poly1305 callbacks for the arm64e C function
+  pointer ABI.
 - The app currently patches `openssl-src` to this fork's
   `carry/apple-arm64e-openssl-fork` branch, with the app-side `Cargo.lock`
   recording the resolved commit. This repo is part of the active chain rather
-  than a dormant fork.
+  than a dormant fork. The app lockfile advances to this refreshed carry in a
+  separate consumer PR after this carry update merges.
 - The remaining work is upstreaming and chain cleanup, not basic enablement.
 - The carry branch now has a focused GitHub Actions workflow,
   `.github/workflows/arm64e-carry-chain.yml`, that validates the OpenSSL
@@ -54,7 +62,7 @@ Rust toolchain" and "forked OpenSSL target definitions".
   - canonical branch: `main`
 - Rust fork:
   - `/Users/tianren/coding/rust`
-  - branch `carry/cypherair-arm64e-toolchain`
+  - branch `carry/cypherair-arm64e-toolchain-stable-1.97`
 - OpenSSL target-definition fork:
   - `/Users/tianren/coding/openssl`
 

@@ -18,7 +18,7 @@ carry layer for Apple `arm64e`.
   - canonical branch: `main`
 - Rust fork:
   - `/Users/tianren/coding/rust`
-  - branch `carry/cypherair-arm64e-toolchain`
+  - branch `carry/cypherair-arm64e-toolchain-stable-1.97`
 - OpenSSL target-definition fork:
   - `/Users/tianren/coding/openssl`
   - branches `carry/apple-arm64e-targets`, `prep/apple-arm64e-targets`
@@ -37,6 +37,9 @@ Current downstream responsibilities include:
 - the OpenSSL submodule pointer used by the current carry chain
 - the `arm64e-carry-chain` workflow that checks the OpenSSL submodule URL,
   branch, and pointer before packaging and testcrate validation
+
+The current carry packages `openssl-src` `300.6.1+3.6.3` and pins the OpenSSL
+submodule to the reviewed `cypherair/openssl` carry merge for OpenSSL 3.6.3.
 
 Detailed arm64e progress belongs in [ARM64E_STATUS.md](ARM64E_STATUS.md). Keep
 that file synchronized when branch topology, the OpenSSL fork pointer, or the
