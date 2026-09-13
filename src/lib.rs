@@ -300,9 +300,7 @@ impl Build {
 
         let os = match target {
             "aarch64-apple-darwin" => "darwin64-arm64-cc",
-            // Temporary downstream carry: this target mapping depends on the
-            // CypherAir OpenSSL fork carrying matching arm64e config targets.
-            // Do not upstream this branch independently of the OpenSSL changes.
+            // arm64e Configure targets exist only in the CypherAir OpenSSL fork.
             "arm64e-apple-darwin" => "darwin64-arm64e-cc",
             // Note that this, and all other android targets, aren't using the
             // `android64-aarch64` (or equivalent) builtin target. That
@@ -416,9 +414,7 @@ impl Build {
             "wasm32-unknown-unknown" => "gcc",
             "wasm32-wasi" => "gcc",
             "aarch64-apple-ios" => "ios64-cross",
-            // Temporary downstream carry: this target mapping depends on the
-            // CypherAir OpenSSL fork carrying matching arm64e config targets.
-            // Do not upstream this branch independently of the OpenSSL changes.
+            // arm64e Configure targets exist only in the CypherAir OpenSSL fork.
             "arm64e-apple-ios" => "ios64e-cross",
             "aarch64-apple-tvos" => "ios64-cross",
             "arm64e-apple-tvos" => "ios64e-cross",
