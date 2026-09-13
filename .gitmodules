@@ -1,6 +1,5 @@
-# Temporary downstream carry for CypherAir Apple arm64e experiments.
-# This fork intentionally points at a CypherAir-maintained OpenSSL branch until
-# the corresponding OpenSSL target definitions land upstream.
+# Points at the CypherAir OpenSSL fork, whose carry branch adds the Apple arm64e
+# Configure targets that upstream OpenSSL does not have.
 [submodule "openssl"]
 	path = openssl
 	url = https://github.com/cypherair/openssl.git
