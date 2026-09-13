@@ -13,6 +13,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: carry-chain-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   carry-chain:
     if: github.repository == 'cypherair/openssl-src-rs'
